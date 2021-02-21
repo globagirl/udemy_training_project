@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DefaultController extends AbstractController
 {
@@ -20,10 +22,19 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="default")
      */
-    public function index(GiftService $gifts)//autowire
+    public function index(GiftService $gifts, Request $request,
+                          SessionInterface $session)//autowire
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
+        //Session cookie---------------
+//        exit($request->cookies->get('PHPSESSID')); //number of our session
+        $session->set('name','session value');
+        $session->remove('name');
+        $session->clear();//clear the entire session data
+        if ($session->has('name')){
+            exit($session->get('name'));
+        }
         //cookies------------------------------------
         //set
         /*
@@ -43,6 +54,7 @@ class DefaultController extends AbstractController
         //cookies------------------------------------
 
         //splash----------------------------------
+        /*
         $this->addFlash(
             'notice',
             'your changes are saved !'
@@ -52,6 +64,7 @@ class DefaultController extends AbstractController
             'warning',
             'your changes are saved !'
         );
+        */
         //end splash----------------------------------
 
         //render method
