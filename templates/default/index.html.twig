@@ -27,6 +27,22 @@
             {% endfor %}
         </ul>
     </div>
+
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {#advanced#}
+    {% for label,messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
 {% endblock %}
 
 

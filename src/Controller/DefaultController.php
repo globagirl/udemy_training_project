@@ -22,6 +22,17 @@ class DefaultController extends AbstractController
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
+
+        $this->addFlash(
+            'notice',
+            'your changes are saved !'
+        );
+
+        $this->addFlash(
+            'warning',
+            'your changes are saved !'
+        );
+
         //render method
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
