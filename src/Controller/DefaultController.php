@@ -13,8 +13,73 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 class DefaultController extends AbstractController
 {
+
+    public function __construct($logger)
+    {
+        //use $logger service
+    }
+//-----------------------------------------------------
+
+    /**
+     * @Route("/generate-url/{param?}", name="generate_url")
+     */
+    public function generate_url()
+    {
+        exit($this->generateUrl(
+            'generate_url', //this doesn't need to be the same route of this function
+            array('param' => 10),
+            UrlGeneratorInterface::ABSOLUTE_URL // to make url absolute: it starts http://hostname../..
+
+        ));
+    }
+//-----------------------------------------------------
+
+    /**
+     * @Route("/download")
+     */
+    public function download(){
+        $path= $this->getParameter('download_directory');
+        return $this->file($path.'file.pdf');//download file
+    }
+//forwarding-----------------------------------------------------
+    /**
+     * @Route("/forwarding-to-controller")
+     */
+    public function forwardingToController(){
+        $response= $this->forward(
+            'App\Controller\DefaultController::methodToForwardTo',
+            array('param'=>'1')
+        );
+        return $response;
+    }
+
+    /**
+     * @Route("/url-to-forward-to/{param?}", name="route_to_forward_to")
+     */
+    public function methodToForwardTo($param){
+        exit('test controller forwarding - '.$param);
+    }
+//redirect-----------------------------------------------------
+    /**
+     * @Route("/redirect-test")
+     */
+    public function redirectTest(){
+        return $this->redirectToRoute('route_to_redirect',
+            array('param'=> 10)
+        );
+    }
+
+    /**
+     * @Route("/url-to-redirect/{param?}", name="route_to_redirect")
+     */
+    public function methodToRedirect(){
+        exit("test redirection");
+    }
+//-----------------------------------------------------
 
     /**
      * @Route("/", name="default")
@@ -39,14 +104,14 @@ class DefaultController extends AbstractController
 //    }
 
     /**
-     * @Route("/1", name="default")
+     * @Route("/page", name="default")
      */
     public function index0(GiftService $gifts, Request $request,
-                          SessionInterface $session)//autowire
+                           SessionInterface $session)//autowire
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         //get post session----------------
-       // exit($request->query->get('page','default'));//TODO didn't work !!!!!!!!!!
+        // exit($request->query->get('page','default'));//TODO didn't work !!!!!!!!!!
         //exit($request->server->get('HTTP_HOST')); //get server data
         //$request->isXmlHttpRequest(); // check if the request is ajax or not
         //$request->request->get('page');// remplace $_POST of an input named page
