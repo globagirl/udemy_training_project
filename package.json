@@ -1,0 +1,25 @@
+{
+  "name": "my_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/globagirl/my_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/globagirl/my_project/issues"
+  },
+  "homepage": "https://github.com/globagirl/my_project#readme",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^1.1.2"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}
